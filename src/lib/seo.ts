@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { AREAS } from '@/data/areas';
-import { BUSINESS } from '@/data/business';
+import { BUSINESS, GOOGLE_RATING } from '@/data/business';
 import type { Service } from '@/data/services';
 
 export type JsonLd = Record<string, unknown>;
@@ -63,6 +63,13 @@ export function plumberSchema(): JsonLd {
     url: BUSINESS.siteUrl,
     sameAs: [BUSINESS.mapsUrl, BUSINESS.reviewsUrl],
     areaServed: AREAS.map((area) => ({ '@type': 'City', name: `${area.name}, VA` })),
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: GOOGLE_RATING.value,
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: GOOGLE_RATING.count,
+    },
   };
 }
 

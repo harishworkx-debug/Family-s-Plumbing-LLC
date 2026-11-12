@@ -9,6 +9,12 @@ export const BUSINESS = {
   mainAreaName: 'Colonial Heights, VA',
 } as const;
 
+export const GOOGLE_RATING = {
+  value: '5.0',
+  numericValue: 5.0,
+  count: 24,
+} as const;
+
 export const MAIN_AREA_SLUG = 'colonial-heights-va';
 
 export const GOOGLE_MAP_EMBED_SRC =

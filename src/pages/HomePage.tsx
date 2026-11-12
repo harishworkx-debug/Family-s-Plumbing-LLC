@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import { ArrowRight, MapPin, Phone, ShieldCheck, Star } from 'lucide-react';
 import { CallButton } from '@/components/CallButton';
 import { CtaBanner } from '@/components/CtaBanner';
 import { FaqList } from '@/components/FaqList';
 import { ServiceCard } from '@/components/ServiceCard';
 import { AREAS } from '@/data/areas';
-import { BUSINESS, GOOGLE_MAP_EMBED_SRC } from '@/data/business';
+import { BUSINESS, GOOGLE_MAP_EMBED_SRC, GOOGLE_RATING } from '@/data/business';
+import { GOOGLE_REVIEWS, GOOGLE_REVIEW_HIGHLIGHTS } from '@/data/reviews';
 import { SERVICES, getService } from '@/data/services';
 import { locationPath, mainLocationPath } from '@/lib/paths';
 import { plumberSchema, useSeo } from '@/lib/seo';
@@ -61,17 +63,7 @@ const HOME_FAQS = [
   },
 ];
 
-const REVIEWS = [
-  { quote: 'Hot water heater.', name: 'Thomas', city: 'Colonial Heights, VA' },
-  { quote: 'Kitchen sink plumbing.', name: 'Jan', city: 'Chesterfield, VA' },
-  { quote: 'Installed a garbage disposal, unplugged our bathroom sink, and redid our kitchen sink.', name: 'William A.', city: 'Richmond, VA' },
-  { quote: 'Plumbing.', name: 'Gil', city: 'Richmond, VA' },
-  { quote: 'Drain and repaired a washing machine drain and power jet water line.', name: 'G.', city: 'Chester, VA' },
-  { quote: 'Fixed outside faucet.', name: 'Debbie', city: 'Richmond, VA' },
-  { quote: 'Repaired clogged bathroom sink and tub.', name: 'Tracey', city: 'Petersburg, VA' },
-  { quote: 'Fixed a major leak in my house.', name: 'Jennifer', city: 'Colonial Heights, VA' },
-  { quote: 'Cleared a clogged sink and replaced toilet parts.', name: 'Liz', city: 'New Kent, VA' },
-];
+const FEATURED_REVIEW_COUNT = 9;
 
 const PROBLEM_FINDER = [
   { symptom: 'Drains are slow or keep clogging', slug: 'drain-cleaning' },
@@ -95,6 +87,9 @@ const HOMEOWNER_TIPS = [
 ];
 
 export function HomePage() {
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const visibleReviews = showAllReviews ? GOOGLE_REVIEWS : GOOGLE_REVIEWS.slice(0, FEATURED_REVIEW_COUNT);
+
   useSeo({
     title: "Plumber in Colonial Heights, VA | Family's Plumbing LLC",
     description: "Reliable plumbing services in Colonial Heights, VA. Water heaters, drain cleaning, faucets, toilets, and leak repair. Call Family's Plumbing LLC at (804) 896-3618.",
@@ -152,9 +147,12 @@ export function HomePage() {
             <Phone className="h-6 w-6 text-blue" aria-hidden="true" />
             <p className="text-sm font-semibold">{BUSINESS.phoneDisplay}<br /><span className="font-normal text-slate-600">Verified business phone</span></p>
           </a>
-          <a href={BUSINESS.reviewsUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 transition hover:text-blue">
-            <Star className="h-6 w-6 text-blue" aria-hidden="true" />
-            <p className="text-sm font-semibold">Five-star reviews<br /><span className="font-normal text-slate-600">9 homeowner reviews on Networx</span></p>
+          <a href={BUSINESS.mapsUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 transition hover:text-blue">
+            <Star className="h-6 w-6 fill-blue text-blue" aria-hidden="true" />
+            <p className="text-sm font-semibold">
+              {GOOGLE_RATING.value} ★ Google rating<br />
+              <span className="font-normal text-slate-600">{GOOGLE_RATING.count} five-star reviews on Google</span>
+            </p>
           </a>
           <div className="flex items-center gap-3">
             <ShieldCheck className="h-6 w-6 text-blue" aria-hidden="true" />
@@ -212,8 +210,8 @@ export function HomePage() {
             </ul>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <CallButton variant="accent" label={`Call ${BUSINESS.phoneDisplay}`} />
-              <a href={BUSINESS.reviewsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm font-semibold text-white transition-all hover:gap-2 hover:text-aqua">
-                Read our reviews on Networx
+              <a href={BUSINESS.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm font-semibold text-white transition-all hover:gap-2 hover:text-aqua">
+                Read our Google reviews
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
             </div>
@@ -223,28 +221,55 @@ export function HomePage() {
 
       <section className="px-5 py-20 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-12 max-w-2xl">
-            <p className="mb-3 text-sm font-bold uppercase tracking-widest text-blue">What Homeowners Say</p>
-            <h2 className="text-3xl font-bold leading-tight md:text-4xl">Recent jobs our customers have shared</h2>
-            <p className="mt-4 text-base leading-relaxed text-slate-600">Every review below is a five-star rating from a homeowner on Networx.</p>
+          <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="mb-3 text-sm font-bold uppercase tracking-widest text-blue">What Homeowners Say</p>
+              <h2 className="text-3xl font-bold leading-tight md:text-4xl">
+                {GOOGLE_RATING.value} out of 5 stars from {GOOGLE_RATING.count} Google reviews
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-slate-600">
+                Verified feedback from homeowners we have served across Colonial Heights and nearby communities.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {GOOGLE_REVIEW_HIGHLIGHTS.map((highlight) => (
+                <span key={highlight} className="rounded-full bg-mist px-3.5 py-1.5 text-xs font-semibold text-navy ring-1 ring-navy/10">
+                  {highlight}
+                </span>
+              ))}
+            </div>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {REVIEWS.map((review) => (
-              <figure key={`${review.name}-${review.city}`} className="flex flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-navy/10">
+            {visibleReviews.map((review) => (
+              <figure key={review.name} className="flex flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-navy/10">
                 <div className="mb-3 flex gap-1 text-blue" aria-label="5 out of 5 stars">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <Star key={index} className="h-4 w-4 fill-current" aria-hidden="true" />
                   ))}
                 </div>
-                <blockquote className="text-base font-semibold leading-relaxed text-navy">&ldquo;{review.quote}&rdquo;</blockquote>
-                <figcaption className="mt-auto pt-4 text-sm text-slate-600">{review.name}, {review.city}</figcaption>
+                <blockquote className="text-sm leading-relaxed text-slate-700">&ldquo;{review.quote}&rdquo;</blockquote>
+                <figcaption className="mt-auto pt-5">
+                  <span className="block text-sm font-bold text-navy">{review.name}</span>
+                  <span className="block text-xs text-slate-500">{review.meta}</span>
+                </figcaption>
               </figure>
             ))}
           </div>
-          <a href={BUSINESS.reviewsUrl} target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-1 text-sm font-semibold text-blue transition-all hover:gap-2">
-            See all reviews on Networx
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </a>
+          <div className="mt-10 flex flex-wrap items-center gap-6">
+            {GOOGLE_REVIEWS.length > FEATURED_REVIEW_COUNT && (
+              <button
+                type="button"
+                onClick={() => setShowAllReviews((prev) => !prev)}
+                className="inline-flex items-center gap-2 rounded-full border border-navy/20 bg-white px-5 py-2.5 text-sm font-semibold text-navy transition hover:border-blue hover:text-blue"
+              >
+                {showAllReviews ? 'Show fewer reviews' : `Read all ${GOOGLE_REVIEWS.length} written reviews`}
+              </button>
+            )}
+            <a href={BUSINESS.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm font-semibold text-blue transition-all hover:gap-2">
+              See all {GOOGLE_RATING.count} reviews on Google
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </a>
+          </div>
         </div>
       </section>
 
