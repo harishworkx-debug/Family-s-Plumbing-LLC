@@ -9,9 +9,14 @@ import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PrivacyPolicyPage, TermsPage } from '@/pages/LegalPages';
 import { ServiceAreasPage } from '@/pages/ServiceAreasPage';
 import { ServicesPage } from '@/pages/ServicesPage';
+import { StandaloneLandingPage } from '@/standalone-landing/StandaloneLandingPage';
 
 function App() {
   const route = resolveRoute(useCurrentPath());
+
+  if (route.page === 'standalone-landing') {
+    return <StandaloneLandingPage />;
+  }
 
   return (
     <SiteLayout>
