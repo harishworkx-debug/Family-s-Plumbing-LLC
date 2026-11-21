@@ -8,7 +8,7 @@ import { plumberSchema, useSeo } from '@/lib/seo';
 export function ContactPage() {
   useSeo({
     title: "Contact Family's Plumbing LLC | Colonial Heights, VA Plumber",
-    description: "Call Family's Plumbing LLC at (804) 896-3618 for plumbing service in Colonial Heights, VA and the surrounding Tri-Cities area.",
+    description: "Call Family's Plumbing LLC at (804) 506-9917 for plumbing service in Colonial Heights, VA and the surrounding Tri-Cities area.",
     path: '/contact',
     jsonLd: [plumberSchema()],
   });

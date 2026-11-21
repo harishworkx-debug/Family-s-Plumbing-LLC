@@ -22,7 +22,7 @@ const WHY_CHOOSE = [
 ];
 
 const HOW_IT_WORKS = [
-  { title: 'Call Family\'s Plumbing LLC', body: 'Dial (804) 896-3618 at any time that suits you.' },
+  { title: 'Call Family\'s Plumbing LLC', body: 'Dial (804) 506-9917 at any time that suits you.' },
   { title: 'Explain your plumbing problem', body: 'Tell us what is happening, where, and how long it has been going on.' },
   { title: 'Discuss service availability', body: 'We confirm whether we can reach your home and when.' },
   { title: 'Confirm next steps by phone', body: 'We agree on the plan directly with you before we arrive.' },
@@ -92,7 +92,7 @@ export function HomePage() {
 
   useSeo({
     title: "Plumber in Colonial Heights, VA | Family's Plumbing LLC",
-    description: "Reliable plumbing services in Colonial Heights, VA. Water heaters, drain cleaning, faucets, toilets, and leak repair. Call Family's Plumbing LLC at (804) 896-3618.",
+    description: "Reliable plumbing services in Colonial Heights, VA. Water heaters, drain cleaning, faucets, toilets, and leak repair. Call Family's Plumbing LLC at (804) 506-9917.",
     path: '/',
     jsonLd: [plumberSchema()],
   });

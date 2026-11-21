@@ -1,16 +1,7 @@
 import { LOCATION_PAGES } from '@/data/areas';
 import { locationPath } from '@/lib/paths';
-import { USE_LANDING_PAGE_AS_HOME } from '@/siteMode';
 
-type StaticPage =
-  | 'home'
-  | 'about'
-  | 'services'
-  | 'service-areas'
-  | 'contact'
-  | 'privacy-policy'
-  | 'terms-and-conditions'
-  | 'standalone-landing';
+type StaticPage = 'home' | 'about' | 'services' | 'service-areas' | 'contact' | 'privacy-policy' | 'terms-and-conditions';
 
 export type Route =
   | { page: StaticPage | 'not-found' }
@@ -35,20 +26,6 @@ export function getAllSitePaths(): string[] {
 
 export function resolveRoute(pathname: string): Route {
   const path = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
-
-  // Standby or dedicated landing routes
-  if (path === '/home-page' || path === '/plumber-colonial-heights-va') {
-    return { page: 'standalone-landing' };
-  }
-
-  // Root toggle behavior
-  if (path === '/') {
-    if (USE_LANDING_PAGE_AS_HOME) {
-      return { page: 'standalone-landing' };
-    }
-    return { page: 'home' };
-  }
-
   const staticPage: StaticPage | undefined = STATIC_ROUTES[path];
   if (staticPage) return { page: staticPage };
 
